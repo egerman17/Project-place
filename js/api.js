@@ -1,4 +1,4 @@
-let map= null;
+let map = null;
 
 function initMap() {
     let location = new Object();
@@ -16,77 +16,98 @@ function initMap() {
                 lat: location.lat,
                 lng: location.lng
             },
-            zoom: 18
+            zoom: 14
         });
         console.log(map, "mapa")
         console.log(localizacion)
-        getRestaurantes(localizacion)
-    });
-}
+        // getRestaurantes(localizacion)
 
-function getRestaurantes(localizacion) {
-    var pyrmot = new google.maps.LatLng(localizacion);
-    var request = {
-        location: pyrmot,
-        radius: '2000',
-        type: ['restaurant']
-    };
-    service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, callback);
-}
 
-function callback(results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-            var place = results[i];
-            console.log(place, "resultados for");
-            // let price = createPrice(place.price_level);
-            let content = `<h3>${place.name}</h3>
-                    <h4>${place.vicinity}</h4>
-                    <img src=${place.icon}></img>
-                    Rating: ${place.rating}
-                    <p>añademe como favorito</p>`;
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-            var marker = new google.maps.Marker({
-                position: place.geometry.location,
-                icon: place.icon,
-                map: map,
-                title: place.name
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function () {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+
+            if (places.length == 0) {
+                return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function (marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+
+            // For each place, get the icon, name and location.
+            var bounds = new google.maps.LatLngBounds();
+
+            places.forEach(function (place) {
+
+                console.log("lugares", places)
+
+                console.log(place, "resultados for");
+                let content = `<h3>${place.name}</h3>
+                        <h4>${place.vicinity}</h4>
+                        <img src=${place.icon}></img>
+                        Rating: ${place.rating}
+                        <button id="añadir">SOY TU FAVORITO</button>`;
+                
+                if (!place.geometry) {
+                    console.log("Returned place contains no geometry");
+                    return;
+                }
+                var icon = {
+                    url: place.icon,
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+                // Create a marker for each place.
+                var marker = markers.push(new google.maps.Marker({
+                    map: map,
+                    icon: icon,
+                    title: place.name,
+                    position: place.geometry.location
+                }));
+                console.log("marker",marker);
+
+                if (place.geometry.viewport) {
+                    console.log("geometria",place.geometry.viewport)
+                    // Only geocodes have viewport.
+                    bounds.union(place.geometry.viewport);
+                } else {
+                    bounds.extend(place.geometry.location);
+                }
+                var infoVentana = new google.maps.InfoWindow({
+                    content: content
+                });
+
+                creandoInfoVentana(marker, infoVentana, content);
+                
             });
 
-            
-            var infowindow = new google.maps.InfoWindow({
-                content: content
-            });
-            bindInfoWindow(marker, map, infowindow, content);
-            marker.setMap(map);
-        }
-    }
-}
+            function creandoInfoVentana(marker, infoVentana, html) {
+                marker.addListener('click', function () {
+                    infoVentana.setContent(html);
+                    infoVentana.open(map, this);
+                });
+            }
+            map.fitBounds(bounds);
 
-function bindInfoWindow(marker, map, infowindow, html) {
-    marker.addListener('click', function () {
-        infowindow.setContent(html);
-        infowindow.open(map, this);
+           
+        });
     });
 }
-
-function createPrice(level){
-    if(level != "" && level !=null){
-        let out = "";
-        for (var x=0; x< level; x++){
-            out += "$";
-        }
-        return out;
-    }else{
-        return "?";
-    }
-}
-
-
-
-
-
-
-
-
