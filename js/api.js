@@ -1,7 +1,8 @@
-let map = null;
+////Script dedicado para iniciar google maps y el buscador de establecimientos. Utilizaremos los datos que nos da la api de google place para que nos devuelva un json de los datos de los establecimientos que busquemos. Podremos buscar por tipo establecimiento o nombre del mismo.
 
 function initMap() {
     let location = new Object();
+/// Capturamos la localización del navegador para situarnos en el mapa.
 
     navigator.geolocation.getCurrentPosition(position => {
 
@@ -20,53 +21,45 @@ function initMap() {
         });
         console.log(map, "mapa")
         console.log(localizacion)
-        // getRestaurantes(localizacion)
 
 
-        // Create the search box and link it to the UI element.
+        // Creando el search box 
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
+        console.log("lo que buscamos",searchBox);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        // Bias the SearchBox results towards current map's viewport.
+        // Sesga los resultados de SearchBox hacia la vista del mapa actual.
         map.addListener('bounds_changed', function () {
             searchBox.setBounds(map.getBounds());
         });
 
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
+       // Escucha el evento que se dispara cuando el usuario busca un establecimiento hace una llamada a la api place, y nos da un json con datos.
+
         searchBox.addListener('places_changed', function () {
             var places = searchBox.getPlaces();
-
+            console.log("placesss searchbox", places);
             if (places.length == 0) {
+                console.warn("no hay datos disponibles");
+                alert("no hay datos disponibles");
                 return;
             }
 
-            // Clear out the old markers.
-            markers.forEach(function (marker) {
-                marker.setMap(null);
-            });
-            markers = [];
-
-            // For each place, get the icon, name and location.
-            var bounds = new google.maps.LatLngBounds();
-
+            //// recogemos los datos para pintar la ventana info
             places.forEach(function (place) {
-
                 console.log("lugares", places)
-
                 console.log(place, "resultados for");
-                let content = `<h3>${place.name}</h3>
-                        <h4>${place.vicinity}</h4>
-                        <img src=${place.icon}></img>
+                let content = `<h2>${place.name}</h2>
+                        <h3>${place.formatted_address}</h3>
+                        <h4>Web: ${place.website}</h4>
                         Rating: ${place.rating}
                         <button id="añadir">SOY TU FAVORITO</button>`;
-                
+
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
                     return;
                 }
+                ///icono del marker
                 var icon = {
                     url: place.icon,
                     size: new google.maps.Size(71, 71),
@@ -74,40 +67,36 @@ function initMap() {
                     anchor: new google.maps.Point(17, 34),
                     scaledSize: new google.maps.Size(25, 25)
                 };
-
-                // Create a marker for each place.
-                var marker = markers.push(new google.maps.Marker({
-                    map: map,
-                    icon: icon,
-                    title: place.name,
-                    position: place.geometry.location
-                }));
-                console.log("marker",marker);
-
-                if (place.geometry.viewport) {
-                    console.log("geometria",place.geometry.viewport)
-                    // Only geocodes have viewport.
-                    bounds.union(place.geometry.viewport);
-                } else {
-                    bounds.extend(place.geometry.location);
-                }
+                //creando el objeto de la ventanainfo, y que recoja los datos del foreach
                 var infoVentana = new google.maps.InfoWindow({
                     content: content
                 });
 
-                creandoInfoVentana(marker, infoVentana, content);
-                
-            });
+                // Creando el marker por cada uno de los establecimientos. He cambiado el tema del push para que me funcione
 
-            function creandoInfoVentana(marker, infoVentana, html) {
+                var marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    icon: icon,
+                    map: map,
+                    title: place.name
+                });
+                console.log("marker", marker);
+                console.log("ventana", infoVentana);
+
+                creandoInfoVentana(marker, map, infoVentana, content);
+
+            });
+            //// Creando la ventana de la info del establecimiento
+            function creandoInfoVentana(marker, map, infoVentana, html) {
                 marker.addListener('click', function () {
                     infoVentana.setContent(html);
                     infoVentana.open(map, this);
                 });
             }
-            map.fitBounds(bounds);
 
-           
+
         });
+
+
     });
 }
