@@ -1,5 +1,5 @@
 // Your web app's Firebase configuration
-var firebaseConfig = {
+export var firebaseConfig = {
     apiKey: "AIzaSyBab4sCtb6BYJ5sZRb1aCF_nPs3LSLlG-k",
     authDomain: "find-place-369b7.firebaseapp.com",
     databaseURL: "https://find-place-369b7.firebaseio.com",
@@ -8,14 +8,8 @@ var firebaseConfig = {
     messagingSenderId: "561570713110",
     appId: "1:561570713110:web:a24cd18b10efd1aec02f37"
 };
-// iniciamos firebase
 
-firebase.initializeApp(firebaseConfig);
-
-// Realizamos esta funcion para registrar al usuario con su cuenta de git, y añadirla, en el caso de que este añadida se avisa.
-document.getElementById("login").addEventListener("click", registrar);
-
-function registrar() {
+export function registrar() {
     console.log("prueba")
     const provider = new firebase.auth.GithubAuthProvider();
     const formulario = firebase.database().ref().child("datos");
@@ -43,18 +37,7 @@ function registrar() {
     });
 }
 
-firebase.auth().onAuthStateChanged(function (authData) {
-
-    if (authData) {
-        console.log("bienvenido" + authData.email)
-    } else {
-        console.log("no hay ninguna sesion abierta")
-    }
-});
-
-document.getElementById("desloguear").addEventListener("click", salir);
-
-function salir() {
+export function salir() {
     firebase.auth().signOut().then(function () {
         // Sign-out successful.
         console.log("Se ha deslogueado correctamente");
@@ -64,3 +47,9 @@ function salir() {
         // An error happened.
     });
 };
+
+// Guardar establecimientos
+export function añadir(guardar){
+    console.log("pulsado");
+    favoritos.push(guardar);
+}

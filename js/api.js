@@ -1,18 +1,19 @@
 ////Script dedicado para iniciar google maps y el buscador de establecimientos. Utilizaremos los datos que nos da la api de google place para que nos devuelva un json de los datos de los establecimientos que busquemos. Podremos buscar por tipo establecimiento o nombre del mismo.
 
-function initMap() {
+export function initMap() {
+
     let location = new Object();
-/// Capturamos la localización del navegador para situarnos en el mapa.
+    /// Capturamos la localización del navegador para situarnos en el mapa.
 
     navigator.geolocation.getCurrentPosition(position => {
 
         location.lat = position.coords.latitude;
         location.lng = position.coords.longitude;
-        localizacion = {
+        const localizacion = {
             lat: location.lat,
             lng: location.lng
         };
-        map = new google.maps.Map(document.getElementById('map'), {
+        const map = new google.maps.Map(document.getElementById('map'), {
             center: {
                 lat: location.lat,
                 lng: location.lng
@@ -26,7 +27,7 @@ function initMap() {
         // Creando el search box 
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
-        console.log("lo que buscamos",searchBox);
+        console.log("lo que buscamos", searchBox);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         // Sesga los resultados de SearchBox hacia la vista del mapa actual.
@@ -34,11 +35,11 @@ function initMap() {
             searchBox.setBounds(map.getBounds());
         });
 
-       // Escucha el evento que se dispara cuando el usuario busca un establecimiento hace una llamada a la api place, y nos da un json con datos.
+        // Escucha el evento que se dispara cuando el usuario busca un establecimiento hace una llamada a la api place, y nos da un json con datos.
 
         searchBox.addListener('places_changed', function () {
             var places = searchBox.getPlaces();
-            console.log("placesss searchbox", places);
+            console.log("places searchbox", places);
             if (places.length == 0) {
                 console.warn("no hay datos disponibles");
                 alert("no hay datos disponibles");
@@ -48,12 +49,36 @@ function initMap() {
             //// recogemos los datos para pintar la ventana info
             places.forEach(function (place) {
                 console.log("lugares", places)
-                console.log(place, "resultados for");
-                let content = `<h2>${place.name}</h2>
+                console.log("resultados for", place);
+                let content = `
+                        <h2>${place.name}</h2>
                         <h3>${place.formatted_address}</h3>
-                        <h4>Web: ${place.website}</h4>
-                        Rating: ${place.rating}
-                        <button id="añadir">SOY TU FAVORITO</button>`;
+                        <h4>Número de opiniones: ${place.user_ratings_total}</h4>
+                        <h4>Reputación sobre cinco: ${place.rating}</h4>
+                    `;
+                const container = document.createElement('div');
+                const button = document.createElement('button');
+
+                container.innerHTML = content;
+                button.innerHTML = 'SOY TU FAVORITO';
+                button.addEventListener('click', function (ev) {
+                    console.log("pulsado", ev, guardar);
+                    favoritos.push(guardar);
+                });
+
+                container.appendChild(button);
+
+
+
+                var guardar = {
+                    nombre: place.name,
+                    direccion: place.formatted_address
+                };
+                /// Añadiendo mis favoritos a firebase
+                console.log("guardar", guardar);
+                var favoritos = firebase.database().ref().child("/datos/-M6Jyoq0jfASfmOQgdxp/favoritos");
+
+
 
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
@@ -69,8 +94,11 @@ function initMap() {
                 };
                 //creando el objeto de la ventanainfo, y que recoja los datos del foreach
                 var infoVentana = new google.maps.InfoWindow({
-                    content: content
+                    content: container
                 });
+
+
+                console.log('Content: ', infoVentana.content);
 
                 // Creando el marker por cada uno de los establecimientos. He cambiado el tema del push para que me funcione
 
@@ -83,13 +111,13 @@ function initMap() {
                 console.log("marker", marker);
                 console.log("ventana", infoVentana);
 
-                creandoInfoVentana(marker, map, infoVentana, content);
+                creandoInfoVentana(marker, map, infoVentana);
 
             });
+
             //// Creando la ventana de la info del establecimiento
-            function creandoInfoVentana(marker, map, infoVentana, html) {
+            function creandoInfoVentana(marker, map, infoVentana) {
                 marker.addListener('click', function () {
-                    infoVentana.setContent(html);
                     infoVentana.open(map, this);
                 });
             }
