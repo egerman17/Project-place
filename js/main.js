@@ -2,31 +2,34 @@
 import { registrar, salir, firebaseConfig } from './script.js';
 import { initMap } from './api.js';
 
-// Create the script tag, set the appropriate attributes
+// Creamos Script, con sus datos correspondientes
 var script = document.createElement('script');
-script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAz0N-D06DyIgb8YWfFI_oYDSHPQemDkn0&callback=initMap&libraries=places';
+script.src = 'https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap&libraries=places';
 script.defer = true;
 script.async = true;
 
-// Attach your callback function to the `window` object
+// llamamos a la fucion initMap con el objeto windows
 window.initMap = initMap;
 
-// Append the 'script' element to 'head'
+// Append 'script' al elemento 'head'
 document.head.appendChild(script);
 
 // iniciamos firebase
 firebase.initializeApp(firebaseConfig);
 
-// Realizamos esta funcion para registrar al usuario con su cuenta de git, y añadirla, en el caso de que este añadida se avisa.
+// Evento que al cliclar llamamos funcion registrar
 document.getElementById("login").addEventListener("click", registrar);
 
-firebase.auth().onAuthStateChanged(function (authData) {
+// Estado de la sesion del usuario
 
+firebase.auth().onAuthStateChanged(function (authData) {
+  
   if (authData) {
-      console.log("bienvenido" + authData.email)
+      console.log("bienvenido " + authData.email)
   } else {
       console.log("no hay ninguna sesion abierta")
   }
 });
 
+// Evento para desloguear al hacer click, llamando a la funcion salir
 document.getElementById("desloguear").addEventListener("click", salir);

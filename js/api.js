@@ -1,4 +1,9 @@
-////Script dedicado para iniciar google maps y el buscador de establecimientos. Utilizaremos los datos que nos da la api de google place para que nos devuelva un json de los datos de los establecimientos que busquemos. Podremos buscar por tipo establecimiento o nombre del mismo.
+////Script dedicado para iniciar google maps y el buscador de establecimientos. Se utiliza tambien firebase para añadir los favoritos.
+
+// Utilizaremos los datos que nos da la api de google place para que nos devuelva un json de los datos 
+// de los establecimientos que busquemos. Podremos buscar por tipo establecimiento o nombre del mismo.
+// Una vez buscados, hacemos click encima del elemento que hemos buscado y aparecerá una ventana con los
+// datos del establecimiento y un boton para añadir. 
 
 export function initMap() {
 
@@ -56,29 +61,27 @@ export function initMap() {
                         <h4>Número de opiniones: ${place.user_ratings_total}</h4>
                         <h4>Reputación sobre cinco: ${place.rating}</h4>
                     `;
+
+                // Creamos el contenedor y el boton añadir con su funcion añadir favoritos.   
                 const container = document.createElement('div');
                 const button = document.createElement('button');
-
+                button.setAttribute("id", "añadir");
                 container.innerHTML = content;
                 button.innerHTML = 'SOY TU FAVORITO';
                 button.addEventListener('click', function (ev) {
                     console.log("pulsado", ev, guardar);
+                    const userId = firebase.auth().currentUser.uid;
+                    console.log("userID", userId);
+                    var favoritos = firebase.database().ref(userId).child('/favoritos');
                     favoritos.push(guardar);
                 });
 
                 container.appendChild(button);
 
-
-
                 var guardar = {
                     nombre: place.name,
                     direccion: place.formatted_address
                 };
-                /// Añadiendo mis favoritos a firebase
-                console.log("guardar", guardar);
-                var favoritos = firebase.database().ref().child("/datos/-M6Jyoq0jfASfmOQgdxp/favoritos");
-
-
 
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
