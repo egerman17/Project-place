@@ -167,6 +167,29 @@ div.alerta{
   margin-left: 40px;
   font-family: 'Courier New', Courier, monospace;
 }
+div.place{
+  background-color:#f7f7f7;
+  display: flex;
+}
+
+#favAñadidos{
+  flex-direction: column;
+}
+#lista{
+  
+  padding: 20px;
+  margin: 30px;
+  box-sizing: content-box;
+  text-align: center;
+}
+#basefire{
+  background: rgb(193, 201, 183);
+  padding: 20px;
+  border: 1px solid #43B17D;
+  border-radius: 10px;
+  margin: 30px;
+  box-sizing: content-box;
+}
 
 #añadir{
 

@@ -68,20 +68,33 @@ export function initMap() {
                 button.setAttribute("id", "añadir");
                 container.innerHTML = content;
                 button.innerHTML = 'SOY TU FAVORITO';
+
+                // Evento que al pulsar el boton realizamos el añadido de base de datos firebase y lista favoritos
+
                 button.addEventListener('click', function (ev) {
                     console.log("pulsado", ev, guardar);
+
+                    // añadimos los favoritos a firebase database en funcion del usuario que este logueado
                     const userId = firebase.auth().currentUser.uid;
                     console.log("userID", userId);
-                    var favoritos = firebase.database().ref(userId).child('/favoritos');
+                    var favoritos = firebase.database().ref(userId).child('/favoritos/');
                     favoritos.push(guardar);
+                    alert("tu favorito ha sido añadido satisfactoriamente");
+                    //pintamos la lista de favoritos.
+                    let lista = document.createElement('div');
+                    document.getElementById("lista").appendChild(lista);
+                    lista.innerHTML = content;
                 });
 
                 container.appendChild(button);
 
+                // array de datos para la base de datos firebase
                 var guardar = {
                     nombre: place.name,
-                    direccion: place.formatted_address
+                    direccion: place.formatted_address,
+                    id: place.place_id
                 };
+
 
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
@@ -118,16 +131,12 @@ export function initMap() {
 
             });
 
-            //// Creando la ventana de la info del establecimiento
+            // Creando la ventana de la info del establecimiento
             function creandoInfoVentana(marker, map, infoVentana) {
                 marker.addListener('click', function () {
                     infoVentana.open(map, this);
                 });
             }
-
-
         });
-
-
     });
 }
