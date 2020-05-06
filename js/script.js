@@ -1,6 +1,6 @@
 // Your web app's Firebase configuration
 export var firebaseConfig = {
-    apiKey: "AIzaSyBab4sCtb6BYJ5sZRb1aCF_nPs3LSLlG-k",
+    apiKey: "APIKEY",
     authDomain: "find-place-369b7.firebaseapp.com",
     databaseURL: "https://find-place-369b7.firebaseio.com",
     projectId: "find-place-369b7",

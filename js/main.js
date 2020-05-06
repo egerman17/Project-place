@@ -4,7 +4,7 @@ import { initMap } from './api.js';
 
 // Creamos Script, con sus datos correspondientes
 var script = document.createElement('script');
-script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAz0N-D06DyIgb8YWfFI_oYDSHPQemDkn0&callback=initMap&libraries=places';
+script.src = 'https://maps.googleapis.com/maps/api/js?key=APYKEY&callback=initMap&libraries=places';
 script.defer = true;
 script.async = true;
 
