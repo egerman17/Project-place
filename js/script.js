@@ -80,7 +80,10 @@ export function recogerDatos() {
 
 export function eliminar() {
     const userId = firebase.auth().currentUser.uid;
+    let fixed = document.getElementById("datosGuardados");
     var borrar = firebase.database().ref(userId).child('/favoritos/');
     console.log("pulsando eliminar", borrar.remove());
     borrar.remove();
+    fixed.innerHTML = "";
+    
 }

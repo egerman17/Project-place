@@ -76,14 +76,12 @@ export function initMap() {
 
                     // añadimos los favoritos a firebase database en funcion del usuario que este logueado
                     const userId = firebase.auth().currentUser.uid;
+                    var estId = place.place_id
                     console.log("userID", userId);
-                    var favoritos = firebase.database().ref(userId).child('/favoritos/');
-                    favoritos.push(guardar);
+                    var favoritos = firebase.database().ref(userId).child('/favoritos/' + estId);
                     alert("tu favorito ha sido añadido satisfactoriamente");
-                    //pintamos la lista de favoritos.
-                    let lista = document.createElement('div');
-                    document.getElementById("lista").appendChild(lista);
-                    lista.innerHTML = content;
+                    favoritos.set(guardar);
+                  
                 });
 
                 container.appendChild(button);
