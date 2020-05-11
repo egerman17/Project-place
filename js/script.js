@@ -56,6 +56,7 @@ export function salir() {
 export function recogerDatos() {
     console.log("pulsado recoger datos");
     const userId = firebase.auth().currentUser.uid;
+    // var estId = place.place_id
     let elemento = firebase.database().ref(userId).child('/favoritos/')
     let fixed = document.getElementById("datosGuardados");
 
@@ -69,7 +70,12 @@ export function recogerDatos() {
                 console.log("datos", datos);
                 fixed.innerHTML += `
                               <div id="basefire"><h2>Favoritos Guardados</h2><h2>${datos.nombre}</h2>
-                              <h3>${datos.direccion}</h3></div>`;
+                              <h3>${datos.direccion}</h3>
+                              <button id ="borrar3">Borrar de la lista</button></div>`;
+                
+                              document.getElementById("borrar3").addEventListener("click", eliminar);
+
+                              
             })
         }
 
@@ -78,9 +84,21 @@ export function recogerDatos() {
 
 
 
-export function eliminar() {
+function eliminar() {
     const userId = firebase.auth().currentUser.uid;
+    // var estId = place.place_id
     var borrar = firebase.database().ref(userId).child('/favoritos/');
-    console.log("pulsando eliminar", borrar.remove());
+    console.log("pulsado desde funcion eliminar list");
     borrar.remove();
+    document.getElementById('basefire').innerHTML = "";
+
+    // if (estId == estId) {
+    //     console.log("estid dentro del if", estId);
+    //     // borrar.remove();
+    //     // document.getElementById('lista').innerHTML = "";
+
+    // } else {
+    //     console.log("no esta en tu lista");
+    // }
 }
+

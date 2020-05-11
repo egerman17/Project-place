@@ -71,21 +71,34 @@ export function initMap() {
 
                 // Evento que al pulsar el boton realizamos el añadido de base de datos firebase y lista favoritos
 
-                button.addEventListener('click', function (ev) {
+                button.addEventListener('click', (ev) => {
                     console.log("pulsado", ev, guardar);
 
                     // añadimos los favoritos a firebase database en funcion del usuario que este logueado
                     const userId = firebase.auth().currentUser.uid;
+                    var estId = place.place_id
                     console.log("userID", userId);
-                    var favoritos = firebase.database().ref(userId).child('/favoritos/');
-                    favoritos.push(guardar);
-                    alert("tu favorito ha sido añadido satisfactoriamente");
+                    var favoritos = firebase.database().ref(userId).child('/favoritos/' + estId);
+                    if (estId === estId) {
+                        console.log(estId)
+                        favoritos.set(guardar);
+                        alert("tu favorito ha sido añadido satisfactoriamente");
+                        // let lista = document.createElement('div');
+                        // document.getElementById("lista").appendChild(lista);
+                        // var button = document.createElement('button');
+                        // button.setAttribute("id", 'borrar');
+                        // document.getElementById("lista").appendChild(button);
+                        // button.innerHTML = 'BORRAME';
+                        // lista.innerHTML = content;
+                    }else{
+                        console.log("ya lo tienes en tu lista ")
+                    };
                     //pintamos la lista de favoritos.
-                    let lista = document.createElement('div');
-                    document.getElementById("lista").appendChild(lista);
-                    lista.innerHTML = content;
-                });
 
+                    // document.getElementById("borrar").addEventListener("click", eliminar(place));
+
+                });
+                
                 container.appendChild(button);
 
                 // array de datos para la base de datos firebase
@@ -139,4 +152,20 @@ export function initMap() {
             }
         });
     });
+    // function eliminar(place) {
+    //     console.log(place, "places en eliminar");
+    //     const userId = firebase.auth().currentUser.uid;
+    //     var estId = place.place_id
+    //     console.log(place.place_id);
+    //     var borrar = firebase.database().ref(userId).child('/favoritos/' + estId);
+    //     console.log("pulsado desde funcion eliminar list");
+    //     if (estId == estId) {
+    //         console.log("estid dentro del if", estId);
+    //         borrar.remove();
+    //         // document.getElementById('lista').innerHTML = "";
+
+    //     } else {
+    //         console.log("no esta en tu lista");
+    //     }
+    // }
 }

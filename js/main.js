@@ -1,5 +1,7 @@
 
-import { registrar, salir, firebaseConfig, recogerDatos, eliminar } from './script.js';
+////// main.js
+
+import { registrar, salir, firebaseConfig, recogerDatos} from './script.js';
 import { initMap } from './api.js';
 
 // Creamos Script, con sus datos correspondientes
@@ -36,6 +38,10 @@ document.getElementById("desloguear").addEventListener("click", salir);
 
 document.getElementById("recoger").addEventListener("click", recogerDatos);
 
-document.getElementById("borrar").addEventListener("click", eliminar);
+
+
+
+
+
 
 
