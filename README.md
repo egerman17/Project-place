@@ -1,15 +1,16 @@
-Project place
+Project Api Place
 
 Segundo proyecto del master Fictizia
 
-Comenzando 🚀
-Empezaremos utilizando una llamada a la API PLACE de Google, y con esos datos los utilizaremos 
-para que los usuarios que se registren con Firebase Authentication eligan sus favoritos y se guardane en la base 
-de datos de Firebase.
+Comenzando 🚀 Empezaremos iniciando sesion con nuestra cuenta de Github a traves del boton indicado. Una vez que estemos en nuestra sesión, añadiremos el nombre de cualquier sitio o establecimiento en el buscador, y con el cual, la api de google place nos devolvera un json con todos los resultados acordes a la busqueda, que saldran señalizados en el mapa de GoogleMaps.
 
-Construido con 🛠️
-Javascript
-Firebase
+Podremos pinchar sobre cada marker, y al hacer click sobre alguno, aparecerá una ventana con los datos del establecimiento o lugar y un botón para añadirlo como favorito, y asi podremos hacer una lista de favoritos en nuestra sesion de usuario a traves de la base de datos en tiempo real de firebase.
 
-Emilio José Germán - Trabajo Inicial - egerman17
+Podremos consultar nuestra lista de guardados haciendo click en el boton "te doy tus favoritos guardados", al hacerlo nos dara los resultados que hayamos guardado en la base de datos de firebase.
+
+Finalmente podremos borrar cada favorito que no queramos pulsando en su boton de borrar.
+
+Construido con 🛠️ Vanilla JS Maps JavaScript API Places API GoogleMaps Firebase
+
+Emilio José Germán - Version 2.0- egerman17
 
