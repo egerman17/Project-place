@@ -1,4 +1,4 @@
-Project place
+Project Api Place
 
 Segundo proyecto del master Fictizia
 
@@ -9,7 +9,7 @@ Podremos pinchar sobre cada marker, y al hacer click sobre alguno, aparecerá un
 
 Podremos consultar nuestra lista de guardados haciendo click en el boton "te doy tus favoritos guardados", al hacerlo nos dara los resultados que hayamos guardado en la base de datos de firebase.
 
-Finalmente podremos borrar la lista de favoritos guardados con el boton de "borrar tus favoritos guardados"
+Finalmente podremos borrar cada seleccion de nuestra lista de favoritos guardados con el boton de borrar.
 
 Construido con 🛠️
 Vanilla JS
@@ -17,5 +17,5 @@ Maps JavaScript API
 Places API GoogleMaps
 Firebase
 
-Emilio José Germán - Version 1.0- egerman17
+Emilio José Germán - Version 2.0- egerman17
 

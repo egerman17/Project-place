@@ -50,40 +50,46 @@ export function salir() {
     });
 };
 
-
-
 //// darme lista de favoritos de la base de datos firebase
+
 export function recogerDatos() {
     console.log("pulsado recoger datos");
     const userId = firebase.auth().currentUser.uid;
-    let elemento = firebase.database().ref(userId).child('/favoritos/')
+    let elemento = firebase.database().ref(userId).child('/favoritos/');
+    console.log("elemento en recogerdatos", elemento);
     let fixed = document.getElementById("datosGuardados");
 
     elemento.on('value', (snapshot) => {
         console.log("antes del foreach", snapshot.val());
-        if (snapshot.val() == null) {
+  
+        if (snapshot.val() === null && !fixed.innerHTML) {
             alert("no tienes nada guardado en tu lista de favoritos")
         } else {
+            fixed.innerHTML = '';
             snapshot.forEach((childSnapshot) => {
                 var datos = childSnapshot.val();
                 console.log("datos", datos);
-                fixed.innerHTML += `
-                              <div id="basefire"><h2>Favoritos Guardados</h2><h2>${datos.nombre}</h2>
-                              <h3>${datos.direccion}</h3></div>`;
+                var id = datos.id;
+                const card = document.createElement('div');
+                card.classList.add('basefire');
+                card.innerHTML = `
+                                
+                                <h2>${datos.nombre}</h2>
+                                <h3>${datos.direccion}</h3>
+                                <p>Número de opiniones: ${datos.n_rating}</p>
+                                <p>Reputación sobre cinco: ${datos.rating}</p>
+                                <button id="borrar" class="delete-button" type="button" >Borrar de la lista</button>`;
+                      
+             ///// al pulsar boton borrar de la lista, borra de la base de datos esa localizacion.                   
+                card.addEventListener('click', () => {
+                  const userId = firebase.auth().currentUser.uid;
+                  var borrar = firebase.database().ref(userId).child('/favoritos/' + datos.id);
+                  borrar.remove();
+                });
+               
+                fixed.appendChild(card);
             })
         }
 
     });
 };
-
-
-
-export function eliminar() {
-    const userId = firebase.auth().currentUser.uid;
-    let fixed = document.getElementById("datosGuardados");
-    var borrar = firebase.database().ref(userId).child('/favoritos/');
-    console.log("pulsando eliminar", borrar.remove());
-    borrar.remove();
-    fixed.innerHTML = "";
-    
-}

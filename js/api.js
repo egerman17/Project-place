@@ -71,26 +71,29 @@ export function initMap() {
 
                 // Evento que al pulsar el boton realizamos el añadido de base de datos firebase y lista favoritos
 
-                button.addEventListener('click', function (ev) {
+                button.addEventListener('click', (ev) => {
                     console.log("pulsado", ev, guardar);
 
-                    // añadimos los favoritos a firebase database en funcion del usuario que este logueado
+                // añadimos los favoritos a firebase database en funcion del usuario que este logueado
                     const userId = firebase.auth().currentUser.uid;
                     var estId = place.place_id
                     console.log("userID", userId);
                     var favoritos = firebase.database().ref(userId).child('/favoritos/' + estId);
-                    alert("tu favorito ha sido añadido satisfactoriamente");
+                    console.log(estId)
                     favoritos.set(guardar);
-                  
+                    alert("tu favorito ha sido añadido satisfactoriamente");
+                    
                 });
-
+                
                 container.appendChild(button);
 
                 // array de datos para la base de datos firebase
                 var guardar = {
                     nombre: place.name,
                     direccion: place.formatted_address,
-                    id: place.place_id
+                    id: place.place_id,
+                    rating: place.rating,
+                    n_rating: place.user_ratings_total
                 };
 
 
@@ -137,4 +140,5 @@ export function initMap() {
             }
         });
     });
+   
 }
