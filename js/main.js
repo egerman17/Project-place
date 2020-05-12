@@ -1,12 +1,10 @@
 
-////// main.js
-
-import { registrar, salir, firebaseConfig, recogerDatos} from './script.js';
+import { registrar, salir, firebaseConfig, recogerDatos } from './script.js';
 import { initMap } from './api.js';
 
 // Creamos Script, con sus datos correspondientes
 var script = document.createElement('script');
-script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAz0N-D06DyIgb8YWfFI_oYDSHPQemDkn0&callback=initMap&libraries=places';
+script.src = 'https://maps.googleapis.com/maps/api/js?key=---APIKEY---&callback=initMap&libraries=places';
 script.defer = true;
 script.async = true;
 
@@ -36,4 +34,6 @@ firebase.auth().onAuthStateChanged(function (authData) {
 // Evento para desloguear al hacer click, llamando a la funcion salir
 document.getElementById("desloguear").addEventListener("click", salir);
 
+//Evento para pintar los datos que tenemos en la base de datos
 document.getElementById("recoger").addEventListener("click", recogerDatos);
+
