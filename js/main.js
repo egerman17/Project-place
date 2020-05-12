@@ -37,11 +37,3 @@ firebase.auth().onAuthStateChanged(function (authData) {
 document.getElementById("desloguear").addEventListener("click", salir);
 
 document.getElementById("recoger").addEventListener("click", recogerDatos);
-
-
-
-
-
-
-
-

@@ -182,7 +182,7 @@ div.place{
   box-sizing: content-box;
   text-align: center;
 }
-#basefire{
+.basefire{
   background: rgb(193, 201, 183);
   padding: 20px;
   border: 1px solid #43B17D;

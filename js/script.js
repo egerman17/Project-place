@@ -50,14 +50,13 @@ export function salir() {
     });
 };
 
-
-
 //// darme lista de favoritos de la base de datos firebase
 export function recogerDatos() {
     console.log("pulsado recoger datos");
     const userId = firebase.auth().currentUser.uid;
     // var estId = place.place_id
-    let elemento = firebase.database().ref(userId).child('/favoritos/')
+    let elemento = firebase.database().ref(userId).child('/favoritos/');
+    console.log("elemento en recogerdatos", elemento);
     let fixed = document.getElementById("datosGuardados");
 
     elemento.on('value', (snapshot) => {
@@ -68,14 +67,11 @@ export function recogerDatos() {
             snapshot.forEach((childSnapshot) => {
                 var datos = childSnapshot.val();
                 console.log("datos", datos);
+                var id = datos.id;
                 fixed.innerHTML += `
-                              <div id="basefire"><h2>Favoritos Guardados</h2><h2>${datos.nombre}</h2>
+                              <div class="basefire"><h2>Favoritos Guardados</h2><h2>${datos.nombre}</h2>
                               <h3>${datos.direccion}</h3>
-                              <button id ="borrar3">Borrar de la lista</button></div>`;
-                
-                              document.getElementById("borrar3").addEventListener("click", eliminar);
-
-                              
+                              <button id=${datos.id}  type="button" onclick = "eliminar(id)">Borrar de la lista</button></div>`;
             })
         }
 
@@ -83,22 +79,9 @@ export function recogerDatos() {
 };
 
 
-
-function eliminar() {
-    const userId = firebase.auth().currentUser.uid;
-    // var estId = place.place_id
-    var borrar = firebase.database().ref(userId).child('/favoritos/');
-    console.log("pulsado desde funcion eliminar list");
-    borrar.remove();
-    document.getElementById('basefire').innerHTML = "";
-
-    // if (estId == estId) {
-    //     console.log("estid dentro del if", estId);
-    //     // borrar.remove();
-    //     // document.getElementById('lista').innerHTML = "";
-
-    // } else {
-    //     console.log("no esta en tu lista");
-    // }
-}
+// function eliminar(id) {
+//     console.log("id dentro de eliminar", id);
+   
+// //     document.getElementById('basefire').innerHTML = "";
+// }
 
